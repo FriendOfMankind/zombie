@@ -1,92 +1,130 @@
-# Surrealist FPS: plan skeleton
+# zombie: plan skeleton
 
-Status: **skeleton**. Anything marked `TBD` hasn't been decided. Anything marked `?` is a guess waiting on Colin.
+Status: **skeleton v2** *(2026-10-14)*. `TBD` = not decided. `?` = a guess waiting on Colin.
 
-## The one-line pitch (draft)
+## Pitch
 
-A fast, ugly-beautiful first-person shooter where **movement is the main verb**, the world is built from handmade, gross textures (clay, scans, blown-out colour), and the **HUD itself is part of the hallucination**.
+**Doom Eternal on a bad trip, played straight as a joke.** A round-based arena FPS that takes every videogame-ism to the extreme: MEGA BOOST, power-ups falling from the sky, a screaming announcer, combo ranks and stacking items. Your loadout is random and keeps changing, the screen is full of numbers, and creepy stuff keeps barging into the HUD and squashing the game out of the way.
 
-Working title: `zombie` (the repo name) `?`
+The joke is the genre itself. The game has to *mock* videogames while still *being* a good one. Otherwise it's a meme that people uninstall after 10 minutes.
 
-## What the reference clips are actually giving us
+## Decided
 
-| Ref | What's on screen | Steal this | Don't steal this |
-|---|---|---|---|
-| 1. Green cube maze, orange fanged blobs | Flat-shaded voxel world, enemies in one loud colour, 11-slot weapon bar with ammo counts, DPS meter, target label ("Demon: 1") | **Readability.** Enemies pop off a calm world. A big arsenal you scroll through. Numbers that go up. | Flat green everywhere gets boring fast |
-| 2–3. Cruelty Squad, plus split-screen feeds (Gerald Ford speech, Uma Musume race) | Garish organic HUD frame, colour palettes cranked until they hurt, spiky "DEMON" decals, low-poly with cheap textures | **Hostile aesthetic on purpose.** The UI frame is meat. Colour is a weapon. | Its difficulty and opacity: Cruelty Squad earns them with a deep immersive-sim loop underneath. We don't have that yet. |
-| 4–5. Clay world, "864 × 12 SURFING + WALL + FREE FALLING + SURFING" | Plasticine/clay textures on everything, green clay zombie hands as the viewmodel, portrait medallions in the corners, trick-combo score with multiplier | **Movement tricks chain into a style score** (Tony Hawk logic in an FPS). Handmade physical textures. Zombie hands. | — |
+| Decision | Answer | Source |
+|---|---|---|
+| Engine | **Godot 4** | Colin, 2026-10-14 |
+| Player is a zombie? | **No.** Something else freaky, `TBD` | Colin, 2026-10-14 |
+| Things barging into the HUD | **Yes, core feature.** Creepy stuff pops up and squashes the game frame out of proportion | Colin, 2026-10-14 |
+| Structure | **Round-based arenas** (recommended), with platforming inside them via movement items. Pure platformer `?` | Claude recommendation, needs confirming |
 
-Open question: are the split-screen feeds in 2–3 **part of the inspiration** (a HUD that fights you for attention) or just how the clip was posted? See Q4.
+## References
 
-## Pillars (draft, max 4)
+| Ref | What it is | Steal |
+|---|---|---|
+| Green cube maze, orange fanged blobs | `?` unidentified | Enemies in one loud colour against a calm world, a big weapon hotbar with ammo counts, a DPS meter |
+| Cruelty Squad | Consumer Softproducts | A HUD frame made of meat, colour as an assault, ugly on purpose |
+| Clay world, "SURFING + WALL + FREE FALLING × 12" | `?` unidentified | Named trick chains with a multiplier, clay textures, freaky viewmodel hands |
+| Neon item grid, "CHOOSE UPGRADE", ELAPSED / THREAT | `?` unidentified (Risk of Rain 2-style item stacks) | **A wall of stacked item icons with ×2, ×3, ×4 counts**, a level-up choice screen, kill feed, a threat timer that rises |
+| Red flesh floor, eyeballs, SANITY bar, $1000 | `?` unidentified | A **sanity meter**, a cash counter, a meat world, a heart in the middle of the hotbar |
+| Red-haired girl, grey stick zombies in a park | `?` unidentified | Bargain-bin asset-store energy (unpolished stock assets as a deliberate joke) |
+| Kingdom Hearts 1 (Traverse Town) | Square Enix | **The JRPG command menu** (Attack / Magic / Items) and circular HP/MP gauges, ripe for parody in an FPS |
+| Pink bald head, skeletons, "11" combo counter | `?` unidentified | A giant combo counter in the middle of the screen, a grotesque mascot-style protagonist |
+| **Sparedevil** | Sludge Pipe Games, 2024 *(source: Steam store page, 2026-10-14)* | See below |
 
-1. **Movement is the verb.** Surfing ramps, wall-runs, free-fall, slides. Shooting is how you *spend* momentum, not the point.
-2. **Style is the score.** Every trick names itself on screen and multiplies. Standing still kills the combo.
-3. **Handmade gross.** Real-world textures (clay, food, skin, carpet, scans) on cheap geometry. Low poly, high texture-weirdness.
-4. **The interface is haunted.** HUD frame, corner portraits and side feeds react, lie, distract and mutate.
+### Sparedevil: what it actually does
+*(source: Steam store page, read 2026-10-14)*
 
-If a feature doesn't serve one of these, it's cut.
+It's an arcade FPS where you bowl at evil pins, styled like '90s bowling-alley animations.
+- **Bowling rules are the combo system:** knocking all 10 pins in one shot is a Strike, finishing them on the second shot is a Spare. Your rank climbs from **D to S**, and S gives a **5× score multiplier**, but you only keep it by staying fast.
+- **You level up from points and pick from 40+ upgrades:** perks, different balls and secondary weapons.
+- **Ball powers:** charge-and-release throws, a jump-slam ("ball-splosion"), and throwing upward at flying targets.
+- **8 pin enemies, each with its own behaviour:** rocket pins that chase you, mortar pins, and **Joker pins that destroy your combo when you knock them down.**
+- Global and friends leaderboards.
+
+**Steal from it:** a real-world sport's scoring rules hijacked as the combo system, and **enemies that attack your score instead of your health.** That second one is the most useful idea in the whole reference pile.
+
+## Pillars
+
+1. **Every videogame-ism, cranked to 11.** If a game has done it, we do it louder and announce it.
+2. **You never get to settle.** Your loadout is random and small, and it rotates. Adapt or die.
+3. **The screen is under attack too.** The HUD, the frame and the UI are enemies.
+4. **Readable under the noise.** Enemies and threats must still read in all the chaos. Without this, it's a screensaver.
 
 ## Core loop
 
 ```
-enter arena → chain movement (score ×) → kill with arsenal (score +) → combo ends on idle/hit
-           → spend score on ??? → next arena mutates
+ROUND START (announcer screams)
+  → fight waves in an arena with 2 weapons + 2 movement items + 1 power-up slot
+  → items drop: from the sky (supply drop), from chests, from enemies
+  → style rank climbs D → C → B → A → S → SSS → ???
+  → round boss / survival timer ends the round
+CHOOSE UPGRADE (pick 1 of 3, RoR2-style stacking)
+  → slot-machine reroll of part of your loadout
+  → next round: arena mutates, threat rises
+DEATH → score screen mocking you → instant restart
 ```
 
-`TBD`: what score buys. Options: new weapons, new movement verbs, world mutations, or nothing (pure leaderboard).
+## Item design: build it like Risk of Rain, not like Doom
 
-## Systems (skeleton)
+Pushback: "a ton of stupid stuff" is how solo projects die. If every item is bespoke code, you'll ship 12 items in a year. Instead, **items are small modifiers that hook into a handful of events**, so most new items are a data file plus a few lines:
 
-### Movement — build this first
-- Ground: run, slide, crouch-jump
-- Air: Quake/Source air-strafe, so **surfing on angled ramps** works for free
-- Walls: wall-run, wall-jump
-- Free-fall: bonus for distance fallen, fall damage `?`
-- Each verb emits a named trick event to the combo system
+`on_hit · on_kill · on_jump · on_land · on_pickup · on_reload · on_damage_taken · on_combo_rank_up · on_round_start`
 
-### Combo / style system
-- Trick events append to a chain: `SURFING + WALL + FREE FALLING + SURFING`
-- `points × chain length`, decays when idle
-- Repeating the same trick gives diminishing returns (forces variety)
+Every item also gets a **rarity**, a **stack rule** (what ×2 does) and a **screaming name**.
 
-### Arsenal
-- Hotbar with ammo counts (ref 1): start with 3, expand to ~10
-- Draft list: plasma, cannon, rocket, homing, minigun, rail, EMP, nuke
-- Each weapon should do something to **movement** too (rocket jump, rail knockback, EMP freezes ramps?)
+### Slots (small on purpose, so randomness matters)
+- **2 weapons**, **2 movement items**, **1 power-up** (timed or one-shot), plus unlimited **passive stacking items** from the upgrade screen
 
-### Enemies
-- One loud colour per enemy family against a calmer world (ref 1)
-- First enemy: the fanged blob. Floats, swarms, dies in one satisfying pop.
+### Starter pool (draft, ~40)
 
-### Surreal layer (the HUD that lies)
-- Organic frame around the viewport (ref 2–3)
-- Corner portraits that react to combo/health (ref 4–5)
-- Side feeds `?` (Q4)
-- Per-level palette inversions, texture swaps mid-fight
+**Weapons:** rocket launcher, super shotgun with a meat hook, railgun, minigun that slows you while you fire, BFG-style nuke ball, bowling ball (thanks, Sparedevil), homing bees, a gun that fires smaller guns, a sniper that only works mid-air, a confetti cannon (does no damage, enemies get stunned from embarrassment)
 
-## Tech (recommendation, not decided)
+**Movement:** grapple hook, double/triple/∞ jump, air dash, wall-run, slide, ground pound, **MEGA BOOST** (a speed pad you throw down), rocket-jump boots, bunny-hop perk (no speed cap), a glider made of a flattened enemy
 
-- **Engine: Godot 4.** Free, light, fast to iterate solo, and Cruelty Squad shipped on Godot, so the aesthetic is proven there. Alternative: Unity if Colin already knows it.
-- Textures: phone photos of real clay/objects → tiling textures. Cheap and on-brand.
-- Platforms: PC first. `TBD`.
+**Power-ups (timed):** QUAD DAMAGE, berserk (melee only, huge fists), invincibility star with the music change, bullet time, giant mode, tiny mode, **2X EVERYTHING** (enemies too), vampire, "HD textures" (the whole game briefly gets photoreal and that's somehow worse)
+
+**Doom Eternal's resource loop, exaggerated:** chainsaw for ammo, burning for armour, glory kills for health. Make it a *slot machine*: every glory kill spins three reels, and the result decides what drops.
+
+**Mocking classics (one-shot gags that are also real mechanics):**
+- **Kingdom Hearts command menu:** an item that freezes time and makes you choose Attack / Magic / Items from a JRPG menu mid-firefight
+- **QTE parody:** "PRESS F TO RESPECT", and enemies within range die of respect
+- **Achievement popups** that cover the screen *during* combat ("ACHIEVEMENT: Got hit"). Some actually buff you.
+- **Loading-screen tips** sliding in mid-fight, and some of them lie
+- **A collectible counter:** 1/9,999 feathers, and collecting them does nothing (until it does)
+- **A level-up flood:** 15 "LEVEL UP!" banners at once, each one slightly squashing the viewport
+- **A boss health bar 4 screens wide** that scrolls off the edge
+
+### Enemies that attack the game, not just you (borrowed from Sparedevil's Joker pins)
+- **Combo thief:** killing it resets your style rank
+- **UI eater:** chews a hole in your HUD, so you lose the ammo counter until you kill it
+- **Popup:** a creepy face bursts into the HUD frame and squashes the viewport while it's alive
+- **Item mimic:** looks like a chest and steals a movement item
+- **Announcer's favourite:** the announcer cheers for *it* instead of you
+
+## The HUD-intrusion system (the signature feature)
+
+How it works in Godot: render the 3D world into a `SubViewport` and show it in a `TextureRect` inside a UI layout. Then anything that enters the layout (a face, a popup, a fake ad, a second gameplay feed) **physically shoves the game view**: it shrinks, stretches non-uniformly and gets pushed to a corner. A short tween makes it feel like getting jostled.
+
+- **Intrusion types:** creepy faces, Gerald Ford-style found footage, a fake ad, a second unrelated "brainrot" feed, a wall of item icons
+- **Severity scales with the round's THREAT level** and with the SANITY meter (from the flesh-world ref)
+- **Hard rule:** the gameplay view never drops below ~50% of the screen, and the crosshair stays in its centre. It's an assault, but you can still play through it.
 
 ## Milestones
 
 | # | Milestone | Done when |
 |---|---|---|
-| 0 | **Movement toy** | A grey box with ramps, walls and a pit feels good to move in for 10 minutes with no enemies and no guns. If this isn't fun, nothing else matters. |
-| 1 | Combo system | Tricks name themselves and multiply on screen |
-| 2 | Vertical slice | 1 arena, 2 weapons, 1 enemy, the haunted HUD frame, 1 clay texture set |
-| 3 | Playtest | Someone who isn't Colin plays it without being told how |
-| 4+ | Content | `TBD` after the slice |
+| 0 | **Movement + shooting toy** | A grey-box arena with a grapple, a rocket launcher and a dash feels good for 10 minutes with dumb target dummies |
+| 1 | **Item event system** | 10 items built entirely from event hooks, stacking works, plus a pickup-from-the-sky drop |
+| 2 | **One round** | Waves, 2 enemy types, the style rank, a CHOOSE UPGRADE screen, death and instant restart |
+| 3 | **HUD intrusions** | The SubViewport squash works, with 3 intrusion types tied to THREAT |
+| 4 | **Vertical slice** | 3 rounds, 25 items, 1 combo-thief enemy, the announcer and one ugly texture set. Someone else plays it. |
+| 5+ | Content | `TBD` after the slice |
 
 ## Open questions for Colin
 
-1. **Experience and team:** have you shipped a game or used an engine before? Solo?
-2. **Engine:** Godot (recommended), Unity, Unreal, or something else?
-3. **Player identity:** is the player a zombie (green hands, repo name), or is that just a vibe?
-4. **Split-screen feeds:** a mechanic, a joke, or not part of this?
-5. **Structure:** arena runs, linear levels, or one big interconnected world?
-6. **Names of the games in refs 1 and 4–5?** Ref 2–3 is Cruelty Squad; the others weren't identified.
-7. **The rest of your examples:** drop them in, and they get a row in the reference table.
+1. **Round-based arena or platformer?** I'm recommending arena rounds with platforming movement inside them. A pure platformer fights the random loadouts.
+2. **Who's the player?** Not a zombie, you said, so some other freaky thing. A bowling pin? A sentient meat hand? A mascot suit with nobody inside?
+3. **Is there a story/world**, or just "round 1, round 2" with an announcer? Mocking videogames suggests a fake, overwrought lore dump that nobody asked for.
+4. **Single player only?** Leaderboards (like Sparedevil's)?
+5. **Names of the unidentified refs:** the neon item grid, the flesh/sanity game, the park zombies and the pink-head skeleton game. I won't guess.
+6. **Have you built anything in Godot before?** If not, milestone 0 includes learning Godot, and that's fine, but it isn't a weekend.
